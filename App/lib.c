@@ -23,3 +23,27 @@ void toCreatePipeline(struct custom_data *data)
     data->pipeline = gst_parse_launch(data->path,NULL);  
 
 }
+
+void stateChangePlay(struct custom_data *data)
+{
+	gst_element_set_state (data->pipeline, GST_STATE_PLAYING);  //  Start playing 
+}
+
+void stateChangePause(struct custom_data *data)
+{
+	gst_element_set_state (data->pipeline, GST_STATE_PAUSED);   // video paused	
+}
+
+void stateChangeNull(struct custom_data *data)
+{
+	gst_element_set_state (data->pipeline, GST_STATE_NULL);     // set state NUll  
+    gst_object_unref (data->pipeline);
+}
+
+void destroyResource(struct custom_data *data)
+{
+    /* Free resources */
+	gst_element_set_state (data->pipeline, GST_STATE_NULL);
+    gst_object_unref (data->pipeline);
+}
+
