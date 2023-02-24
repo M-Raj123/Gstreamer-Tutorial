@@ -36,14 +36,14 @@ void stateChangePause(struct custom_data *data)
 
 void stateChangeNull(struct custom_data *data)
 {
-	gst_element_set_state (data->pipeline, GST_STATE_NULL);     // set state NUll  
+    gst_element_set_state (data->pipeline, GST_STATE_NULL);     // set state NUll  
     gst_object_unref (data->pipeline);
 }
 
 void destroyResource(struct custom_data *data)
 {
     /* Free resources */
-	gst_element_set_state (data->pipeline, GST_STATE_NULL);
+    gst_element_set_state (data->pipeline, GST_STATE_NULL);
     gst_object_unref (data->pipeline);
 }
 
@@ -130,4 +130,55 @@ void * ctrlThread(void *arg)
 
     }
     return NULL;
+}
+
+/* Bus Thread */
+void * busThread(void *arg)
+{
+    
+    struct custom_data *ptr = (struct custom_data *) arg;
+    
+    while(ptr->pipeline!=NULL)
+    {
+
+        ptr->bus = gst_element_get_bus (ptr->pipeline);
+        ptr->msg = gst_bus_timed_pop_filtered (ptr->bus, GST_CLOCK_TIME_NONE,GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
+        
+        /* handling error msg */
+        if (ptr->msg != NULL) 
+        {
+            GError *err;
+            gchar *debug_info;
+            
+            /* Parse message */
+            switch (GST_MESSAGE_TYPE (ptr->msg)) 
+            {
+                case GST_MESSAGE_ERROR:
+                {
+                    gst_message_parse_error (ptr->msg, &err, &debug_info);
+                    g_printerr ("Error received from element %s: %s\n",GST_OBJECT_NAME (ptr->msg->src), err->message);
+                    g_printerr ("Debugging information: %s\n",debug_info ? debug_info : "none");
+                    g_clear_error (&err);
+                    g_free (debug_info);
+                    break;
+                }
+                case GST_MESSAGE_EOS:
+                {
+                    g_print ("End-Of-Stream reached.\n");
+                    stateChangeToPlayagain(ptr);
+                    break;
+                }
+                default:
+                {
+                    /* We should not reach here because we only asked for ERRORs and EOS */
+                    g_printerr ("Unexpected message received.\n");
+                    break;
+                }
+            }
+    
+        }
+    }
+
+    gst_message_unref (ptr->msg);
+    gst_object_unref (ptr->bus);
 }
