@@ -40,6 +40,13 @@ void stateChangeNull(struct custom_data *data)
     gst_object_unref (data->pipeline);
 }
 
+void stateChangeToPlayagain(struct custom_data *data)
+{
+    data->event = gst_event_new_seek(1.0, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH, GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_NONE, 0);  // move the start position
+    gst_element_send_event(data->pipeline, data->event);
+    gst_element_set_state(data->pipeline, GST_STATE_PLAYING); 	// Restart the pipeline
+}
+
 void destroyResource(struct custom_data *data)
 {
     /* Free resources */
@@ -165,7 +172,7 @@ void * busThread(void *arg)
                 case GST_MESSAGE_EOS:
                 {
                     g_print ("End-Of-Stream reached.\n");
-                    stateChangeToPlayagain(ptr);
+                    stateChangeToPlayagain(ptr);   		// autoplay
                     break;
                 }
                 default:
@@ -182,3 +189,4 @@ void * busThread(void *arg)
     gst_message_unref (ptr->msg);
     gst_object_unref (ptr->bus);
 }
+
