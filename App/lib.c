@@ -73,14 +73,13 @@ void * ctrlThread(void *arg)
         printf("1: file path:\n");
         printf("2: play\n");
         printf("3: pause\n");
-        printf("4: new path\n");
-        printf("5: close current video\n");
-        printf("6. exit\n");
+        printf("4: close current video\n");
+        printf("5. exit\n");
 
         scanf("%d",&n);
         printf("num: %d \n",n );
 
-        if(n==6) 
+        if(n==5) 
         {   
             if(!flag) 
             {
@@ -114,13 +113,7 @@ void * ctrlThread(void *arg)
                     stateChangePause(ptr);
                     break;
             }
-            case 4: 
-            {
-                    printf("new path\n");
-                    toCreatePipeline(ptr);  
-                    break; 
-            }
-            case 5:
+            case 4:
             {
                     printf("video close\n");
                     destroyResource(ptr);
