@@ -8,11 +8,11 @@ namespace WPEFramework
     namespace Plugin 
     {
 
-    	  SERVICE_REGISTRATION(MyPlayer,1,0);    	
+    	SERVICE_REGISTRATION(MyPlayer,1,0);    	
 
         MyPlayer::MyPlayer(): PluginHost::JSONRPC()
         {
-           
+           Register(_T("sayHello"),&MyPlayer::sayHello,this);
         }
 
         MyPlayer::~MyPlayer()
@@ -31,8 +31,16 @@ namespace WPEFramework
         {
             //shared pointer deinitialized
             //deinitialize external library
-           
         }
-
+        
+        
+        uint32_t MyPlayer::sayHello(const JsonObject& parameters, JsonObject& response)
+        {
+            uint32_t result = Core::ERROR_NONE;
+            // std::cout<< parameters ;
+            // std::cout<< "Helloworld\n";
+            return (result);
+        }
+        
     }  // namespace plugin  
 }  // namespace framework
