@@ -8,28 +8,32 @@ namespace WPEFramework
       class MyPlayer : public PluginHost::IPlugin
                      , public PluginHost::JSONRPC {
 
-			private:
+	private:
 
-				MyPlayer(const MyPlayer&) = delete;
-				MyPlayer& operator=(const MyPlayer&) = delete;
-				
-
-			public:
-
-				MyPlayer(); 
-			  virtual ~MyPlayer();     
-		  
-	 			// IPlugin methods
-	 			virtual const string Initialize(PluginHost::IShell* service) override;
-		 		virtual void Deinitialize(PluginHost::IShell* service) override;
-	 			virtual string Information() const override { return {}; };
+             MyPlayer(const MyPlayer&) = delete;
+   	     MyPlayer& operator=(const MyPlayer&) = delete;
+	     
+	     // simple method 
+	     uint32_t sayHello(const JsonObject& parameters, JsonObject& response);
 
 
-    		BEGIN_INTERFACE_MAP(MyPlayer)
-    		INTERFACE_ENTRY(PluginHost::IPlugin)
-    		END_INTERFACE_MAP
+
+	public:
+
+	     MyPlayer(); 
+       	     virtual ~MyPlayer();     
+
+	     // IPlugin methods
+	     virtual const string Initialize(PluginHost::IShell* service) override;
+	     virtual void Deinitialize(PluginHost::IShell* service) override;
+	     virtual string Information() const override { return {}; };
+
+
+    	     BEGIN_INTERFACE_MAP(MyPlayer)
+    	     INTERFACE_ENTRY(PluginHost::IPlugin)
+    	     END_INTERFACE_MAP
 		
-		};
+	};
 
    } // namespace Plugin
 } // namespace WPEFramework
