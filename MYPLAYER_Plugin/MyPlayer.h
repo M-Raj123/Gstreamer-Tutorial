@@ -39,7 +39,7 @@ namespace WPEFramework
 
     			BEGIN_INTERFACE_MAP(MyPlayer)
     			INTERFACE_ENTRY(PluginHost::IPlugin)
-				INTERFACE_ENTRY(PluginHost::IDispatcher)
+			INTERFACE_ENTRY(PluginHost::IDispatcher)
     			END_INTERFACE_MAP
 		
 		public:
