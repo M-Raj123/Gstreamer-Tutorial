@@ -145,7 +145,7 @@ namespace WPEFramework
             data->loop(data,loop);
             data->Print();
             cout<< "-----------------\n";
-            if(loop == 1) response["message"] = "video loop mode on";
+            if(loop == "1") response["message"] = "video loop mode on";
             else response["message"] = "loop mode off";
             return result;  
         }
